@@ -39,6 +39,7 @@ namespace TheOtherRoles
             Seer.clearAndReload();
             Morphling.clearAndReload();
             Camouflager.clearAndReload();
+            Shuffler.clearAndReload();
             Spy.clearAndReload();
             Child.clearAndReload();
             BountyHunter.clearAndReload();
@@ -412,6 +413,76 @@ namespace TheOtherRoles
             camouflager = null;
             camouflageTimer = 0f;
             cooldown = TheOtherRolesPlugin.camouflagerCooldown.GetValue();
+        }
+    }
+
+    public static class Shuffler
+    {
+        public static PlayerControl shuffler;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float cooldown = float.MaxValue;
+        public static float shuffleTimer = 0f;
+        public static List<PlayerControl> shuffledRoles { get; set; }
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite()
+        {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.ShuffleButton.png", 100f);
+            return buttonSprite;
+        }
+
+        private static System.Random rng = new System.Random();
+
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+
+        public static void shuffle()
+        {
+            shuffledRoles = new List<PlayerControl>(PlayerControl.AllPlayerControls.ToArray());
+            shuffledRoles.Shuffle();
+        }
+
+        public static void resetShuffle()
+        {
+            shuffleTimer = 0f;
+            if (Camouflager.camouflageTimer > 0f)
+            {
+                return;
+            }
+
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+            {
+                if (p == null) continue;
+                if (Morphling.morphling == null || Morphling.morphling != p)
+                {
+                    p.SetName(p.Data.PlayerName);
+                    p.SetHat(p.Data.HatId, (int)p.Data.ColorId);
+                    Helpers.setSkinWithAnim(p.MyPhysics, p.Data.SkinId);
+                    p.SetPet(p.Data.PetId);
+                    p.CurrentPet.Visible = p.Visible;
+                    p.SetColor(p.Data.ColorId);
+                }
+            }
+        }
+
+        public static void clearAndReload()
+        {
+            resetShuffle();
+            shuffler = null;
+            shuffleTimer = 0f;
+            cooldown = TheOtherRolesPlugin.shufflerCooldown.GetValue();
         }
     }
 

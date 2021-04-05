@@ -118,7 +118,7 @@ namespace TheOtherRoles
             }
 
             // Crewmate roles with no changes: Child
-            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Janitor and Mafioso
+            // Impostor roles with no changes: Morphling, Camouflager, Shuffler, Vampire, Godfather, Janitor and Mafioso
         }
 
         static void setMafiaNameTags() {
@@ -230,17 +230,19 @@ namespace TheOtherRoles
             Spy.spyTimer -= Time.deltaTime;
         }
 
-        static void camouflageAndMorphActions() {
+        static void camouflageAndShuffleAndMorphActions() {
             float oldCamouflageTimer = Camouflager.camouflageTimer;
+            float oldShuffleTimer = Shuffler.shuffleTimer;
             float oldMorphTimer = Morphling.morphTimer;
 
             Camouflager.camouflageTimer -= Time.deltaTime;
+            Shuffler.shuffleTimer -= Time.deltaTime;
             Morphling.morphTimer -= Time.deltaTime;
 
             // Morphling player size not done here
 
             // Set morphling morphed look
-            if (Morphling.morphTimer > 0f && Camouflager.camouflageTimer <= 0f) {
+            if (Morphling.morphTimer > 0f && Camouflager.camouflageTimer <= 0f && Shuffler.shuffleTimer <= 0f) {
                 if (Morphling.morphling != null && Morphling.morphTarget != null) {
                     if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer)
                         Morphling.morphling.nameText.Text = Morphling.morphTarget.Data.PlayerName;
@@ -265,7 +267,41 @@ namespace TheOtherRoles
                 }
             }
 
-            // Set camouflaged look (overrides morphling morphed look if existent)
+            // Set shuffled look (overrides morphling morphed look if existent)
+            if (Shuffler.shuffleTimer > 0f)
+            {
+                int i = 0;
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                {
+                    PlayerControl sp = Shuffler.shuffledRoles[i];
+                    GameData.PlayerInfo data = sp.Data;
+
+                    if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer)
+                        p.nameText.Text = sp.Data.PlayerName;
+                    p.myRend.material.SetColor("_BackColor", Palette.ShadowColors[sp.Data.ColorId]);
+                    p.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[sp.Data.ColorId]);
+                    p.HatRenderer.SetHat(sp.Data.HatId, sp.Data.ColorId);
+                    p.nameText.transform.localPosition = new Vector3(0f, (sp.Data.HatId == 0U) ? 0.7f : 1.05f, -0.5f);
+
+                    if (p.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.Instance.AllSkins[(int)sp.Data.SkinId].ProdId) {
+                        Helpers.setSkinWithAnim(p.MyPhysics, sp.Data.SkinId);
+                    }
+                    if (p.CurrentPet == null || p.CurrentPet.ProdId != DestroyableSingleton<HatManager>.Instance.AllPets[(int)sp.Data.PetId].ProdId) {
+                        if (p.CurrentPet) UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
+                        p.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.AllPets[(int)sp.Data.PetId]);
+                        p.CurrentPet.transform.position = p.transform.position;
+                        p.CurrentPet.Source = p;
+                        p.CurrentPet.Visible = p.Visible;
+                        PlayerControl.SetPlayerMaterialColors(sp.Data.ColorId, p.CurrentPet.rend);
+                    } else if (p.CurrentPet) {
+                        PlayerControl.SetPlayerMaterialColors(sp.Data.ColorId, p.CurrentPet.rend);
+                    }
+
+                    i++;
+                }
+            }
+
+            // Set camouflaged look (overrides morphling morphed and shuffler shuffled looks if existent)
             if (Camouflager.camouflageTimer > 0f) {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer)
@@ -276,9 +312,12 @@ namespace TheOtherRoles
                     Helpers.setSkinWithAnim(p.MyPhysics, 0);
                     if (p.CurrentPet) UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
                 }
-            } 
-            
+            }
+
             // Everyone but morphling reset
+            if (oldShuffleTimer > 0f && Shuffler.shuffleTimer <= 0f) {
+                Shuffler.resetShuffle();
+            }
             if (oldCamouflageTimer > 0f && Camouflager.camouflageTimer <= 0f) {
                 Camouflager.resetCamouflage();
             }
@@ -400,8 +439,8 @@ namespace TheOtherRoles
             seerUpdate();
             // Spy update();
             spyUpdate();
-            // Camouflager and Morphling
-            camouflageAndMorphActions();
+            // Camouflager, Shuffler and Morphling
+            camouflageAndShuffleAndMorphActions();
             // Child
             childUpdate();
             // Bounty Hunter

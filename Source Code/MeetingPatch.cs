@@ -362,6 +362,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Morphling.";
                     else if(Camouflager.camouflager != null && ExileController.Instance.exiled.Object.PlayerId == Camouflager.camouflager.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Camouflager.";
+                    else if(Shuffler.shuffler != null && ExileController.Instance.exiled.Object.PlayerId == Shuffler.shuffler.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Shuffler.";
                     else if(Lovers.lover1 != null && ExileController.Instance.exiled.Object.PlayerId == Lovers.lover1.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The ImpLover.";
                     else if(Lovers.lover2 != null && ExileController.Instance.exiled.Object.PlayerId == Lovers.lover2.PlayerId)

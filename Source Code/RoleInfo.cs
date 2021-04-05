@@ -103,6 +103,14 @@ namespace TheOtherRoles
                 shortDescription = "Hide among others";
                 isGood = false;
             }
+            else if (Shuffler.shuffler != null && p == Shuffler.shuffler)
+            {
+                name = "Shuffler";
+                color = Shuffler.color;
+                introDescription = "Shuffle colors and kill the Crewmates";
+                shortDescription = "Shuffle all the colors";
+                isGood = false;
+            }
             else if (Vampire.vampire != null && p == Vampire.vampire) {
                 name = "Vampire";
                 color = Vampire.color;

@@ -39,6 +39,7 @@ namespace TheOtherRoles
         public static CustomStringOption mafiaSpawnRate = CustomOption.AddString(num++.ToString(), cs(Janitor.color) + "Mafia", rates);
         public static CustomStringOption morphlingSpawnRate = CustomOption.AddString(num++.ToString(), cs(Morphling.color) + "Morphling", rates);
         public static CustomStringOption camouflagerSpawnRate = CustomOption.AddString(num++.ToString(), cs(Camouflager.color) + "Camouflager", rates);
+        public static CustomStringOption shufflerSpawnRate = CustomOption.AddString(num++.ToString(), cs(Shuffler.color) + "Shuffler", rates);
         public static CustomStringOption vampireSpawnRate = CustomOption.AddString(num++.ToString(), cs(Vampire.color) + "Vampire", rates);
 
         public static CustomStringOption loversSpawnRate = CustomOption.AddString(num++.ToString(), cs(Lovers.color) + "Lovers", rates);
@@ -65,6 +66,7 @@ namespace TheOtherRoles
         public static CustomNumberOption janitorCooldown = CustomOption.AddNumber(num++.ToString(), "Janitor Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption morphlingCooldown = CustomOption.AddNumber(num++.ToString(), "Morphling Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption camouflagerCooldown = CustomOption.AddNumber(num++.ToString(), "Camouflager Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomNumberOption shufflerCooldown = CustomOption.AddNumber(num++.ToString(), "Shuffler Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption vampireKillDelay = CustomOption.AddNumber(num++.ToString(), "Vampire Kill Delay", 10f, 1f, 20f, 1f);
         public static CustomNumberOption vampireCooldown = CustomOption.AddNumber(num++.ToString(), "Vampire Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomToggleOption vampireCanKillNearGarlics = CustomOption.AddToggle(num++.ToString(), "Vampire Can Kill Near Garlics", true);
@@ -137,6 +139,7 @@ namespace TheOtherRoles
                 mafiaSpawnRate,
                 morphlingSpawnRate,
                 camouflagerSpawnRate,
+                shufflerSpawnRate,
                 vampireSpawnRate,
 
                 loversSpawnRate,
@@ -162,6 +165,7 @@ namespace TheOtherRoles
                 janitorCooldown,
                 morphlingCooldown,
                 camouflagerCooldown,
+                shufflerCooldown,
                 vampireKillDelay,
                 vampireCooldown,
                 vampireCanKillNearGarlics,

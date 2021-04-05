@@ -12,7 +12,7 @@ namespace TheOtherRoles
     {
         static void Postfix(VersionShower __instance) {
             string spacer = new String('\n', 15);
-            string text = "[FCCE03FF]TheOtherRoles[] v1.8.2:\n- Modded by [FCCE03FF]Eisbison[] and [FFEB91FF]Thunderstorm584[]\n- Balanced with [FFEB91FF]Dhalucard";
+            string text = "[FCCE03FF]MadMod [] v1.0.0:\n- Modded by [FCCE03FF]mattmilesi[] and the [FFEB91FF]MadBit Coding GVNG[]\n- Based on [FFEB91FF]TheOtherRoles";
             if (__instance.text.Text.Contains(spacer))
                 __instance.text.Text += "\n" + text;
             else
@@ -25,8 +25,8 @@ namespace TheOtherRoles
     {
         static void Postfix(VersionShower __instance)
         {
-            __instance.text.Text += "\n[FCCE03FF]TheOtherRoles[FFFFFFFF]";
-            __instance.text.Text += "\nModded by [FCCE03FF]Eisbison[FFFFFFFF]";
+            __instance.text.Text += "\n[FCCE03FF]MadMod[FFFFFFFF]";
+            __instance.text.Text += "\nModded by the [FCCE03FF]MadBit Coding GVNG[FFFFFFFF]";
         }
     }
 }

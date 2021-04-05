@@ -54,6 +54,7 @@ namespace TheOtherRoles
             
             impSettings.Add((byte)RoleId.Morphling, TheOtherRolesPlugin.morphlingSpawnRate.GetValue());
             impSettings.Add((byte)RoleId.Camouflager, TheOtherRolesPlugin.camouflagerSpawnRate.GetValue());
+            impSettings.Add((byte)RoleId.Shuffler, TheOtherRolesPlugin.shufflerSpawnRate.GetValue());
             impSettings.Add((byte)RoleId.Vampire, TheOtherRolesPlugin.vampireSpawnRate.GetValue());
 
             crewSettings.Add((byte)RoleId.Jester, TheOtherRolesPlugin.jesterSpawnRate.GetValue());
