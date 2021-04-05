@@ -30,6 +30,7 @@ namespace TheOtherRoles
         Seer,
         Morphling,
         Camouflager,
+        Shuffler,
         Spy,
         Child,
         BountyHunter,
@@ -73,7 +74,8 @@ namespace TheOtherRoles
         JackalKill = 100,
         SidekickKill = 101,
         JackalCreatesSidekick = 102,
-        SidekickPromotes = 103
+        SidekickPromotes = 103,
+        ShufflerShuffle = 104,
     }
 
     public static class RPCProcedure {
@@ -156,6 +158,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Camouflager:
                         Camouflager.camouflager = player;
+                        break;
+                    case RoleId.Shuffler:
+                        Shuffler.shuffler = player;
                         break;
                     case RoleId.Spy:
                         Spy.spy = player;
@@ -268,7 +273,7 @@ namespace TheOtherRoles
                         vent.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
                         if (canUse) {
                             PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(vent.Id);
-			                vent.SetButtons(false);
+                            vent.SetButtons(false);
                         }
                     }
                 }
@@ -442,6 +447,14 @@ namespace TheOtherRoles
             Camouflager.camouflageTimer = 10f;
         }
 
+        public static void shufflerShuffle()
+        {
+            if (Shuffler.shuffler == null) return;
+
+            Shuffler.shuffle();
+            Shuffler.shuffleTimer = 10f;
+        }
+
         public static void loverSuicide(byte remainingLoverId) {
             if (Lovers.lover1 != null && !Lovers.lover1.Data.IsDead && Lovers.lover1.PlayerId == remainingLoverId) {
                 Lovers.lover1.MurderPlayer(Lovers.lover1);
@@ -543,6 +556,7 @@ namespace TheOtherRoles
                     // Impostor roles
                     if(player == Morphling.morphling) Morphling.clearAndReload();
                     if(player == Camouflager.camouflager) Camouflager.clearAndReload();
+                    if(player == Shuffler.shuffler) Shuffler.clearAndReload();
                     if(player == Godfather.godfather) Godfather.clearAndReload();
                     if(player == Mafioso.mafioso) Mafioso.clearAndReload();
                     if(player == Janitor.janitor) Janitor.clearAndReload();
@@ -658,6 +672,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.CamouflagerCamouflage:
                     RPCProcedure.camouflagerCamouflage();
+                    break;
+                case (byte)CustomRPC.ShufflerShuffle:
+                    RPCProcedure.shufflerShuffle();
                     break;
                 case (byte)CustomRPC.LoverSuicide:
                     RPCProcedure.loverSuicide(HFPCBBHJIPJ.ReadByte());

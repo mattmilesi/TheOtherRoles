@@ -24,6 +24,7 @@ namespace TheOtherRoles
         private static CustomButton seerRevealButton;
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
+        private static CustomButton shufflerButton;
         private static CustomButton spyButton;
         private static CustomButton trackerButton;
         private static CustomButton vampireKillButton;
@@ -42,6 +43,7 @@ namespace TheOtherRoles
             seerRevealButton.MaxTimer = Seer.cooldown;
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
+            shufflerButton.MaxTimer = Shuffler.cooldown;
             spyButton.MaxTimer = Spy.cooldown;
             vampireKillButton.MaxTimer = Vampire.cooldown;
             trackerButton.MaxTimer = 0f;
@@ -308,6 +310,28 @@ namespace TheOtherRoles
                 true,
                 10f,
                 () => { camouflagerButton.Timer = camouflagerButton.MaxTimer; }
+            );
+
+            // Shuffler shuffle
+            shufflerButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShufflerShuffle, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.shufflerShuffle();
+                },
+                () => { return Shuffler.shuffler != null && Shuffler.shuffler == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    shufflerButton.Timer = shufflerButton.MaxTimer;
+                    shufflerButton.isEffectActive = false;
+                    shufflerButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                },
+                Shuffler.getButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                __instance,
+                true,
+                10f,
+                () => { shufflerButton.Timer = shufflerButton.MaxTimer; }
             );
 
             // Spy button
